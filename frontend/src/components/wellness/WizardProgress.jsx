@@ -10,7 +10,7 @@ export const WizardProgress = ({ currentKey }) => {
     const currentIndex = STEPS.findIndex((s) => s.key === currentKey);
     return (
         <nav
-            className="w-full max-w-3xl mx-auto px-6 sm:px-8 mt-8"
+            className="w-full max-w-3xl mx-auto px-6 sm:px-8 mt-10"
             data-testid="wizard-progress"
         >
             <ol className="flex items-center gap-2 sm:gap-3">
@@ -23,19 +23,21 @@ export const WizardProgress = ({ currentKey }) => {
                             className="flex-1 flex items-center gap-2 sm:gap-3"
                         >
                             <div
-                                className={`flex-1 h-[2px] rounded-full transition-all duration-700 ${
-                                    done || active
-                                        ? "bg-ink"
-                                        : "bg-line"
+                                className={`flex-1 h-px rounded-full transition-all duration-700 ${
+                                    done
+                                        ? "bg-gold"
+                                        : active
+                                            ? "bg-gradient-to-r from-gold to-transparent"
+                                            : "bg-line"
                                 }`}
                             />
                             <span
-                                className={`text-[10px] sm:text-xs uppercase tracking-[0.25em] whitespace-nowrap transition-colors duration-500 ${
+                                className={`text-[10px] sm:text-xs uppercase tracking-[0.28em] whitespace-nowrap transition-colors duration-500 ${
                                     active
-                                        ? "text-ink"
+                                        ? "text-gold"
                                         : done
-                                            ? "text-inkSoft"
-                                            : "text-inkSoft/50"
+                                            ? "text-creamSoft"
+                                            : "text-muted/60"
                                 }`}
                             >
                                 {step.label}

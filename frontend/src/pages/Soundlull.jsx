@@ -27,9 +27,9 @@ const STEPS = {
 };
 
 const fadeStep = {
-    initial: { opacity: 0, y: 14 },
+    initial: { opacity: 0, y: 18 },
     animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -14 },
+    exit: { opacity: 0, y: -18 },
     transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
 };
 
@@ -63,9 +63,8 @@ export default function Soundlull() {
                 intensity_id: intensityId,
                 duration_minutes: duration,
             });
-            // Hold the calming loading state for a beat (min 1.8s)
             const elapsed = Date.now() - startedAt;
-            const remaining = Math.max(0, 1800 - elapsed);
+            const remaining = Math.max(0, 1900 - elapsed);
             setTimeout(() => {
                 setPlaylist(res.data);
                 setStep(STEPS.SESSION);
@@ -76,13 +75,8 @@ export default function Soundlull() {
         }
     };
 
-    const handleSessionComplete = () => {
-        setStep(STEPS.REFLECTION);
-    };
-
-    const handleFeedback = () => {
-        setStep(STEPS.COMPLETE);
-    };
+    const handleSessionComplete = () => setStep(STEPS.REFLECTION);
+    const handleFeedback = () => setStep(STEPS.COMPLETE);
 
     const restart = () => {
         setMoodId(null);
@@ -92,9 +86,7 @@ export default function Soundlull() {
         setStep(STEPS.MOOD);
     };
 
-    const exitToReflection = () => {
-        setStep(STEPS.REFLECTION);
-    };
+    const exitToReflection = () => setStep(STEPS.REFLECTION);
 
     const showProgress = [
         STEPS.MOOD,
@@ -108,28 +100,38 @@ export default function Soundlull() {
     const intensityObj = catalog?.intensities.find((i) => i.id === intensityId);
 
     return (
-        <div className="relative min-h-screen bg-canvas text-ink overflow-x-hidden">
+        <div className="relative min-h-screen bg-night text-cream overflow-x-hidden">
+            {/* Aurora backdrop (sticky to viewport) */}
+            <div className="fixed inset-0 pointer-events-none">
+                <div className="absolute top-[-20vw] right-[-15vw] w-[70vw] h-[70vw] rounded-full bg-sage/15 blur-3xl animate-glow-pulse" />
+                <div className="absolute bottom-[-25vw] left-[-15vw] w-[75vw] h-[75vw] rounded-full bg-coral/12 blur-3xl animate-glow-pulse" style={{ animationDelay: "3s" }} />
+                <div className="absolute top-[30vh] left-[20vw] w-[40vw] h-[40vw] rounded-full bg-gold/8 blur-3xl animate-glow-pulse" style={{ animationDelay: "5s" }} />
+            </div>
+
             <NoiseOverlay />
 
-            {/* Ambient background blobs */}
-            <div className="pointer-events-none absolute top-[-120px] right-[-120px] w-[420px] h-[420px] rounded-full bg-rose/20 blur-3xl" />
-            <div className="pointer-events-none absolute bottom-[-160px] left-[-160px] w-[480px] h-[480px] rounded-full bg-sage/20 blur-3xl" />
-
-            <header className="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 pt-8 flex items-center justify-between">
+            <header className="relative z-20 max-w-7xl mx-auto px-6 sm:px-10 pt-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full border border-line bg-canvas flex items-center justify-center">
-                        <div className="w-2 h-2 rounded-full bg-ink animate-breathe" />
+                    <div className="relative w-10 h-10 rounded-full glass flex items-center justify-center">
+                        <div className="w-2 h-2 rounded-full bg-gold shadow-[0_0_14px_rgba(224,177,118,0.7)] animate-breathe" />
                     </div>
-                    <span className="font-serif text-2xl text-ink tracking-tight">
-                        Soundlull
-                    </span>
+                    <div className="flex flex-col leading-none">
+                        <span
+                            className="font-serif text-2xl text-cream tracking-tight"
+                            style={{ fontVariationSettings: '"SOFT" 50, "opsz" 144' }}
+                        >
+                            Soundlull
+                        </span>
+                        <span className="text-[9px] uppercase tracking-[0.32em] text-muted mt-0.5">
+                            audio therapy
+                        </span>
+                    </div>
                 </div>
-                <div className="hidden sm:flex items-center gap-6 text-xs uppercase tracking-[0.28em] text-inkSoft">
-                    <span>Mood</span>
-                    <span>·</span>
-                    <span>Sound</span>
-                    <span>·</span>
-                    <span>Stillness</span>
+                <div className="hidden md:flex items-center gap-3 glass rounded-full px-5 py-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-sage animate-breathe" />
+                    <span className="text-[10px] uppercase tracking-[0.28em] text-creamSoft">
+                        Mood · Sound · Stillness
+                    </span>
                 </div>
             </header>
 
@@ -139,12 +141,9 @@ export default function Soundlull() {
                 <AnimatePresence mode="wait">
                     {step === STEPS.WELCOME && (
                         <motion.div key="welcome" {...fadeStep}>
-                            <WelcomeScreen
-                                onStart={() => setStep(STEPS.MOOD)}
-                            />
+                            <WelcomeScreen onStart={() => setStep(STEPS.MOOD)} />
                         </motion.div>
                     )}
-
                     {step === STEPS.MOOD && catalog && (
                         <motion.div key="mood" {...fadeStep}>
                             <MoodSelector
@@ -155,7 +154,6 @@ export default function Soundlull() {
                             />
                         </motion.div>
                     )}
-
                     {step === STEPS.INTENSITY && catalog && (
                         <motion.div key="intensity" {...fadeStep}>
                             <IntensitySelector
@@ -167,7 +165,6 @@ export default function Soundlull() {
                             />
                         </motion.div>
                     )}
-
                     {step === STEPS.DURATION && catalog && (
                         <motion.div key="duration" {...fadeStep}>
                             <DurationSelector
@@ -179,13 +176,11 @@ export default function Soundlull() {
                             />
                         </motion.div>
                     )}
-
                     {step === STEPS.LOADING && (
                         <motion.div key="loading" {...fadeStep}>
                             <LoadingScreen />
                         </motion.div>
                     )}
-
                     {step === STEPS.SESSION && playlist && (
                         <motion.div key="session" {...fadeStep}>
                             <AudioPlayer
@@ -200,13 +195,11 @@ export default function Soundlull() {
                             />
                         </motion.div>
                     )}
-
                     {step === STEPS.REFLECTION && (
                         <motion.div key="reflection" {...fadeStep}>
                             <FeedbackScreen onSubmit={handleFeedback} />
                         </motion.div>
                     )}
-
                     {step === STEPS.COMPLETE && (
                         <motion.div key="complete" {...fadeStep}>
                             <CompletionScreen onRestart={restart} />
@@ -216,7 +209,7 @@ export default function Soundlull() {
 
                 {error && (
                     <div
-                        className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-ink text-canvas px-5 py-3 rounded-full text-sm z-50"
+                        className="fixed bottom-6 left-1/2 -translate-x-1/2 glass-strong text-cream px-5 py-3 rounded-full text-sm z-50"
                         data-testid="error-toast"
                     >
                         {error}
@@ -224,10 +217,15 @@ export default function Soundlull() {
                 )}
             </main>
 
-            <footer className="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 py-10 mt-10 border-t border-line">
-                <p className="text-xs uppercase tracking-[0.28em] text-inkSoft text-center">
-                    Soundlull · a quiet companion · 2026
-                </p>
+            <footer className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-10 mt-10 border-t border-line">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p className="text-[10px] uppercase tracking-[0.32em] text-muted">
+                        Soundlull · a quiet companion · 2026
+                    </p>
+                    <p className="text-[10px] uppercase tracking-[0.32em] text-muted">
+                        Made with stillness
+                    </p>
+                </div>
             </footer>
         </div>
     );

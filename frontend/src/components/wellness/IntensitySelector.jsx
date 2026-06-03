@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 14 },
+    hidden: { opacity: 0, y: 18 },
     show: (i) => ({
         opacity: 1,
         y: 0,
-        transition: { delay: 0.06 * i, duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+        transition: { delay: 0.07 * i, duration: 0.6, ease: [0.16, 1, 0.3, 1] },
     }),
 };
 
@@ -19,20 +19,29 @@ export const IntensitySelector = ({
 }) => {
     return (
         <section
-            className="max-w-5xl mx-auto px-6 sm:px-10 py-14 md:py-20"
+            className="relative max-w-6xl mx-auto px-6 sm:px-10 py-16 md:py-20"
             data-testid="intensity-step"
         >
-            <header className="mb-12 md:mb-16 max-w-2xl">
-                <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-inkSoft mb-4">
-                    Step two of three
+            <header className="mb-14 md:mb-16 max-w-2xl">
+                <p className="text-[11px] uppercase tracking-[0.32em] text-gold mb-5">
+                    Step two of three · Intensity
                 </p>
-                <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.02] text-ink">
+                <h2
+                    className="font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.02] text-cream"
+                    style={{ fontVariationSettings: '"SOFT" 50, "opsz" 144' }}
+                >
                     Choose your{" "}
-                    <span className="italic text-sage">intensity</span>.
+                    <span
+                        className="italic text-gold"
+                        style={{ fontVariationSettings: '"SOFT" 100, "opsz" 144' }}
+                    >
+                        depth
+                    </span>
+                    .
                 </h2>
-                <p className="mt-5 text-base sm:text-lg text-inkSoft max-w-lg leading-relaxed">
-                    From a soft hush to a full landscape &mdash; how much
-                    presence would you like the sound to have?
+                <p className="mt-5 text-base sm:text-lg text-creamSoft max-w-lg leading-relaxed">
+                    From whisper to full landscape &mdash; how much presence
+                    would you like the sound to have?
                 </p>
             </header>
 
@@ -48,14 +57,13 @@ export const IntensitySelector = ({
                             initial="hidden"
                             animate="show"
                             onClick={() => onSelect(item.id)}
-                            className={`group relative text-left rounded-3xl p-6 transition-all duration-500 border ${
+                            className={`group relative text-left rounded-[1.5rem] p-6 transition-all duration-500 ${
                                 isSelected
-                                    ? "bg-sage-tint border-sage ring-2 ring-sage"
-                                    : "bg-surface border-line hover:bg-surfaceHover hover:-translate-y-1"
+                                    ? "glass-strong card-selected-glow"
+                                    : "glass hover:-translate-y-1.5 hover:bg-glassStrong"
                             }`}
                         >
-                            {/* Intensity meter */}
-                            <div className="flex items-end gap-1 h-12 mb-5">
+                            <div className="flex items-end gap-1 h-14 mb-6">
                                 {Array.from({ length: 5 }).map((_, idx) => {
                                     const filled = idx <= i;
                                     return (
@@ -64,21 +72,26 @@ export const IntensitySelector = ({
                                             className={`flex-1 rounded-sm transition-all duration-500 ${
                                                 filled
                                                     ? isSelected
-                                                        ? "bg-ink"
-                                                        : "bg-sage"
+                                                        ? "bg-gold shadow-[0_0_12px_rgba(224,177,118,0.5)]"
+                                                        : "bg-sage/80"
                                                     : "bg-line"
                                             }`}
                                             style={{
-                                                height: `${20 + idx * 18}%`,
+                                                height: `${24 + idx * 18}%`,
                                             }}
                                         />
                                     );
                                 })}
                             </div>
-                            <h3 className="font-serif text-2xl text-ink leading-tight">
+                            <h3
+                                className={`font-serif text-2xl leading-tight ${
+                                    isSelected ? "text-gold" : "text-cream"
+                                }`}
+                                style={{ fontVariationSettings: '"SOFT" 70, "opsz" 144' }}
+                            >
                                 {item.label}
                             </h3>
-                            <p className="mt-2 text-sm text-inkSoft leading-relaxed">
+                            <p className="mt-2 text-sm text-creamSoft leading-relaxed">
                                 {item.description}
                             </p>
                         </motion.button>
@@ -90,7 +103,7 @@ export const IntensitySelector = ({
                 <button
                     data-testid="intensity-back-button"
                     onClick={onBack}
-                    className="inline-flex items-center gap-2 text-inkSoft hover:text-ink transition-colors duration-300"
+                    className="inline-flex items-center gap-2 text-creamSoft hover:text-cream transition-colors duration-300"
                 >
                     <ArrowLeft size={16} strokeWidth={1.75} />
                     Back
@@ -99,10 +112,10 @@ export const IntensitySelector = ({
                     data-testid="intensity-next-button"
                     onClick={onNext}
                     disabled={!selected}
-                    className="group inline-flex items-center gap-3 bg-ink text-canvas rounded-full pl-7 pr-3 py-3 text-base font-medium transition-all duration-500 hover:bg-sage hover:scale-[1.02] active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    className="btn-gold group inline-flex items-center gap-3 rounded-full pl-7 pr-3 py-3 text-base font-medium disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                 >
                     Continue
-                    <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-canvas text-ink transition-transform duration-500 group-hover:translate-x-1 group-disabled:translate-x-0">
+                    <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-night text-gold transition-transform duration-500 group-hover:translate-x-1">
                         <ArrowRight size={16} strokeWidth={1.75} />
                     </span>
                 </button>

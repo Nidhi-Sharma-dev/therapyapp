@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, Clock } from "lucide-react";
 
 const fadeUp = {
-    hidden: { opacity: 0, y: 14 },
+    hidden: { opacity: 0, y: 18 },
     show: (i) => ({
         opacity: 1,
         y: 0,
-        transition: { delay: 0.06 * i, duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+        transition: { delay: 0.07 * i, duration: 0.6, ease: [0.16, 1, 0.3, 1] },
     }),
 };
 
@@ -27,18 +27,27 @@ export const DurationSelector = ({
 }) => {
     return (
         <section
-            className="max-w-5xl mx-auto px-6 sm:px-10 py-14 md:py-20"
+            className="relative max-w-6xl mx-auto px-6 sm:px-10 py-16 md:py-20"
             data-testid="duration-step"
         >
-            <header className="mb-12 md:mb-16 max-w-2xl">
-                <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-inkSoft mb-4">
-                    Step three of three
+            <header className="mb-14 md:mb-16 max-w-2xl">
+                <p className="text-[11px] uppercase tracking-[0.32em] text-gold mb-5">
+                    Step three of three · Duration
                 </p>
-                <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.02] text-ink">
+                <h2
+                    className="font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.02] text-cream"
+                    style={{ fontVariationSettings: '"SOFT" 50, "opsz" 144' }}
+                >
                     How long would you{" "}
-                    <span className="italic text-sage">like to stay</span>?
+                    <span
+                        className="italic text-gold"
+                        style={{ fontVariationSettings: '"SOFT" 100, "opsz" 144' }}
+                    >
+                        like to stay
+                    </span>
+                    ?
                 </h2>
-                <p className="mt-5 text-base sm:text-lg text-inkSoft max-w-lg leading-relaxed">
+                <p className="mt-5 text-base sm:text-lg text-creamSoft max-w-lg leading-relaxed">
                     Even a small amount of time is enough.
                 </p>
             </header>
@@ -55,36 +64,35 @@ export const DurationSelector = ({
                             initial="hidden"
                             animate="show"
                             onClick={() => onSelect(d)}
-                            className={`group flex flex-col items-start rounded-3xl p-6 transition-all duration-500 border ${
+                            className={`group relative flex flex-col items-start rounded-[1.5rem] p-6 transition-all duration-500 ${
                                 isSelected
-                                    ? "bg-ink text-canvas border-ink"
-                                    : "bg-surface border-line hover:bg-surfaceHover hover:-translate-y-1"
+                                    ? "glass-strong card-selected-glow"
+                                    : "glass hover:-translate-y-1.5 hover:bg-glassStrong"
                             }`}
                         >
                             <div
                                 className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500 ${
                                     isSelected
-                                        ? "bg-canvas text-ink"
-                                        : "bg-canvas text-ink"
+                                        ? "bg-gold text-night"
+                                        : "bg-night/40 text-cream border border-line"
                                 }`}
                             >
                                 <Clock size={16} strokeWidth={1.5} />
                             </div>
                             <p
-                                className={`font-serif text-4xl sm:text-5xl mt-6 leading-none ${
-                                    isSelected ? "text-canvas" : "text-ink"
+                                className={`font-serif mt-6 leading-none text-[clamp(2.5rem,4vw,3.5rem)] ${
+                                    isSelected ? "text-gold" : "text-cream"
                                 }`}
+                                style={{ fontVariationSettings: '"SOFT" 80, "opsz" 144' }}
                             >
                                 {d}
-                                <span className="text-xl ml-1 opacity-70">
+                                <span className="text-base font-sans ml-1.5 opacity-60 uppercase tracking-widest align-top">
                                     min
                                 </span>
                             </p>
                             <p
-                                className={`mt-3 text-sm uppercase tracking-[0.18em] ${
-                                    isSelected
-                                        ? "text-canvas/70"
-                                        : "text-inkSoft"
+                                className={`mt-4 text-xs uppercase tracking-[0.22em] ${
+                                    isSelected ? "text-gold/80" : "text-muted"
                                 }`}
                             >
                                 {LABELS[d]}
@@ -98,7 +106,7 @@ export const DurationSelector = ({
                 <button
                     data-testid="duration-back-button"
                     onClick={onBack}
-                    className="inline-flex items-center gap-2 text-inkSoft hover:text-ink transition-colors duration-300"
+                    className="inline-flex items-center gap-2 text-creamSoft hover:text-cream transition-colors duration-300"
                 >
                     <ArrowLeft size={16} strokeWidth={1.75} />
                     Back
@@ -107,10 +115,10 @@ export const DurationSelector = ({
                     data-testid="duration-start-button"
                     onClick={onStart}
                     disabled={!selected}
-                    className="group inline-flex items-center gap-3 bg-ink text-canvas rounded-full pl-7 pr-3 py-3 text-base font-medium transition-all duration-500 hover:bg-sage hover:scale-[1.02] active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    className="btn-gold group inline-flex items-center gap-3 rounded-full pl-7 pr-3 py-3 text-base font-medium disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                 >
-                    Start session
-                    <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-canvas text-ink transition-transform duration-500 group-hover:translate-x-1 group-disabled:translate-x-0">
+                    Begin session
+                    <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-night text-gold transition-transform duration-500 group-hover:translate-x-1">
                         <ArrowRight size={16} strokeWidth={1.75} />
                     </span>
                 </button>

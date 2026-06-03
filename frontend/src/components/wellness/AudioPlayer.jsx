@@ -34,11 +34,10 @@ export const AudioPlayer = ({
     const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(0.7);
     const [muted, setMuted] = useState(false);
-    const [queueOpen, setQueueOpen] = useState(false);
+    const [queueOpen, setQueueOpen] = useState(true);
 
     const current = tracks[index];
 
-    // Reset progress when track changes; autoplay if already playing
     useEffect(() => {
         const a = audioRef.current;
         if (!a) return;
@@ -77,9 +76,8 @@ export const AudioPlayer = ({
     };
 
     const handleEnded = () => {
-        if (index < tracks.length - 1) {
-            setIndex(index + 1);
-        } else {
+        if (index < tracks.length - 1) setIndex(index + 1);
+        else {
             setIsPlaying(false);
             onSessionComplete();
         }
@@ -109,18 +107,23 @@ export const AudioPlayer = ({
 
     return (
         <section
-            className="max-w-5xl mx-auto px-6 sm:px-10 py-12 md:py-16"
+            className="relative max-w-6xl mx-auto px-6 sm:px-10 py-12 md:py-16"
             data-testid="audio-player-screen"
         >
-            {/* Top meta */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-10">
                 <div>
-                    <p className="text-xs uppercase tracking-[0.32em] text-inkSoft">
+                    <p className="text-[11px] uppercase tracking-[0.32em] text-gold">
                         Now holding you
                     </p>
-                    <h2 className="font-serif text-3xl sm:text-4xl text-ink mt-2">
+                    <h2
+                        className="font-serif text-3xl sm:text-4xl text-cream mt-2"
+                        style={{ fontVariationSettings: '"SOFT" 70, "opsz" 144' }}
+                    >
                         {sessionMeta.moodLabel}{" "}
-                        <span className="italic text-sage">
+                        <span
+                            className="italic text-gold"
+                            style={{ fontVariationSettings: '"SOFT" 100, "opsz" 144' }}
+                        >
                             · {sessionMeta.intensityLabel}
                         </span>
                     </h2>
@@ -128,92 +131,80 @@ export const AudioPlayer = ({
                 <button
                     data-testid="player-exit-button"
                     onClick={onExit}
-                    className="inline-flex items-center gap-2 text-inkSoft hover:text-ink transition-colors duration-300"
+                    className="btn-outline inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm"
                     aria-label="End session"
                 >
-                    <X size={18} strokeWidth={1.5} />
-                    <span className="hidden sm:inline text-sm">End session</span>
+                    <X size={16} strokeWidth={1.5} />
+                    <span className="hidden sm:inline">End session</span>
                 </button>
             </div>
 
-            <div className="grid lg:grid-cols-12 gap-8">
-                {/* Visualizer + controls */}
+            <div className="grid lg:grid-cols-12 gap-6">
                 <div className="lg:col-span-7">
-                    <div className="relative bg-surface border border-line rounded-3xl p-8 sm:p-12 overflow-hidden">
-                        {/* Breathing visualizer */}
+                    <div className="relative glass-strong rounded-[2rem] p-8 sm:p-12 overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-sage/8 pointer-events-none" />
+
                         <div className="relative h-72 sm:h-80 flex items-center justify-center mb-8">
                             <div
-                                className={`absolute w-72 h-72 rounded-full bg-sage/30 blur-3xl ${
-                                    isPlaying ? "animate-breathe-slow" : ""
+                                className={`absolute w-80 h-80 rounded-full bg-sage/30 blur-3xl ${
+                                    isPlaying ? "animate-breathe-slow" : "opacity-30"
                                 }`}
                             />
                             <div
-                                className={`absolute w-56 h-56 rounded-full bg-rose/40 blur-2xl ${
-                                    isPlaying ? "animate-breathe" : ""
+                                className={`absolute w-60 h-60 rounded-full bg-gold/40 blur-3xl ${
+                                    isPlaying ? "animate-breathe" : "opacity-40"
                                 }`}
                             />
                             <div
-                                className={`absolute w-40 h-40 rounded-full bg-sand blur-xl ${
-                                    isPlaying ? "animate-float-y" : ""
+                                className={`absolute w-40 h-40 rounded-full bg-coral/30 blur-2xl ${
+                                    isPlaying ? "animate-float-y" : "opacity-30"
                                 }`}
                             />
-                            <div className="relative w-40 h-40 rounded-full border border-line bg-canvas/70 backdrop-blur-xl flex items-center justify-center">
+                            <div className="relative w-44 h-44 rounded-full glass-strong flex items-center justify-center">
                                 {isPlaying ? (
                                     <div className="flex items-end">
-                                        <span
-                                            className="wave-bar"
-                                            style={{ animationDelay: "0s" }}
-                                        />
-                                        <span
-                                            className="wave-bar"
-                                            style={{ animationDelay: "0.15s" }}
-                                        />
-                                        <span
-                                            className="wave-bar"
-                                            style={{ animationDelay: "0.3s" }}
-                                        />
-                                        <span
-                                            className="wave-bar"
-                                            style={{ animationDelay: "0.45s" }}
-                                        />
-                                        <span
-                                            className="wave-bar"
-                                            style={{ animationDelay: "0.6s" }}
-                                        />
+                                        {[0, 0.15, 0.3, 0.45, 0.6].map((d) => (
+                                            <span
+                                                key={d}
+                                                className="wave-bar"
+                                                style={{ animationDelay: `${d}s` }}
+                                            />
+                                        ))}
                                     </div>
                                 ) : (
-                                    <div className="w-3 h-3 rounded-full bg-ink/70" />
+                                    <div className="w-3 h-3 rounded-full bg-gold/80" />
                                 )}
                             </div>
                         </div>
 
-                        {/* Now-playing meta */}
                         <div className="text-center">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={current.id}
-                                    initial={{ opacity: 0, y: 8 }}
+                                    initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -8 }}
-                                    transition={{ duration: 0.5 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.4 }}
                                 >
-                                    <p className="text-xs uppercase tracking-[0.28em] text-inkSoft mb-3">
+                                    <p className="text-[11px] uppercase tracking-[0.32em] text-gold mb-3">
                                         Track {index + 1} of {tracks.length}
                                     </p>
                                     <h3
                                         data-testid="current-track-title"
-                                        className="font-serif text-3xl sm:text-4xl text-ink leading-tight"
+                                        className="font-serif text-3xl sm:text-4xl text-cream leading-tight"
+                                        style={{
+                                            fontVariationSettings: '"SOFT" 80, "opsz" 144',
+                                        }}
                                     >
                                         {current.title}
                                     </h3>
-                                    <p className="mt-2 text-sm text-inkSoft">
+                                    <p className="mt-2 text-sm text-creamSoft">
                                         {current.artist}
                                     </p>
                                 </motion.div>
                             </AnimatePresence>
                         </div>
 
-                        {/* Progress bar */}
                         <div className="mt-8">
                             <input
                                 data-testid="progress-slider"
@@ -224,21 +215,20 @@ export const AudioPlayer = ({
                                 onChange={seek}
                                 className="sl-range w-full"
                                 style={{
-                                    background: `linear-gradient(to right, #2A3229 0%, #2A3229 ${percent}%, #E3E1DB ${percent}%, #E3E1DB 100%)`,
+                                    background: `linear-gradient(to right, #E0B176 0%, #E0B176 ${percent}%, rgba(236,231,217,0.12) ${percent}%, rgba(236,231,217,0.12) 100%)`,
                                 }}
                             />
-                            <div className="flex justify-between text-xs text-inkSoft mt-2 tabular-nums">
+                            <div className="flex justify-between text-xs text-muted mt-2 tnum">
                                 <span>{formatTime(progress)}</span>
                                 <span>{formatTime(duration)}</span>
                             </div>
                         </div>
 
-                        {/* Controls */}
-                        <div className="mt-8 flex items-center justify-center gap-6">
+                        <div className="mt-10 flex items-center justify-center gap-6">
                             <button
                                 data-testid="prev-track-button"
                                 onClick={prev}
-                                className="w-12 h-12 rounded-full border border-line text-ink flex items-center justify-center hover:bg-canvas hover:scale-105 active:scale-95 transition-all duration-300"
+                                className="w-12 h-12 rounded-full glass text-cream flex items-center justify-center hover:bg-glassStrong hover:scale-105 active:scale-95 transition-all duration-300"
                                 aria-label="Previous track"
                             >
                                 <SkipBack size={18} strokeWidth={1.75} />
@@ -246,14 +236,14 @@ export const AudioPlayer = ({
                             <button
                                 data-testid="play-pause-button"
                                 onClick={togglePlay}
-                                className="w-16 h-16 rounded-full bg-ink text-canvas flex items-center justify-center hover:bg-sage transition-all duration-300 hover:scale-105 active:scale-95"
+                                className="btn-gold w-[68px] h-[68px] rounded-full flex items-center justify-center"
                                 aria-label={isPlaying ? "Pause" : "Play"}
                             >
                                 {isPlaying ? (
-                                    <Pause size={22} strokeWidth={1.75} />
+                                    <Pause size={24} strokeWidth={1.75} />
                                 ) : (
                                     <Play
-                                        size={22}
+                                        size={24}
                                         strokeWidth={1.75}
                                         className="ml-1"
                                     />
@@ -262,19 +252,18 @@ export const AudioPlayer = ({
                             <button
                                 data-testid="next-track-button"
                                 onClick={next}
-                                className="w-12 h-12 rounded-full border border-line text-ink flex items-center justify-center hover:bg-canvas hover:scale-105 active:scale-95 transition-all duration-300"
+                                className="w-12 h-12 rounded-full glass text-cream flex items-center justify-center hover:bg-glassStrong hover:scale-105 active:scale-95 transition-all duration-300"
                                 aria-label="Next track"
                             >
                                 <SkipForward size={18} strokeWidth={1.75} />
                             </button>
                         </div>
 
-                        {/* Volume */}
                         <div className="mt-8 flex items-center gap-3 max-w-xs mx-auto">
                             <button
                                 data-testid="mute-toggle-button"
                                 onClick={() => setMuted((v) => !v)}
-                                className="text-inkSoft hover:text-ink transition-colors"
+                                className="text-creamSoft hover:text-gold transition-colors"
                                 aria-label="Toggle mute"
                             >
                                 {muted || volume === 0 ? (
@@ -300,23 +289,27 @@ export const AudioPlayer = ({
                     </div>
                 </div>
 
-                {/* Queue */}
-                <aside className="lg:col-span-5">
-                    <div className="bg-surface border border-line rounded-3xl p-6 sm:p-8">
+                <aside className="lg:col-span-5 space-y-6">
+                    <div className="glass rounded-[2rem] p-6 sm:p-7">
                         <button
                             data-testid="queue-toggle-button"
                             onClick={() => setQueueOpen((v) => !v)}
-                            className="w-full flex items-center justify-between text-left mb-4"
+                            className="w-full flex items-center justify-between text-left mb-5"
                         >
                             <div>
-                                <p className="text-xs uppercase tracking-[0.28em] text-inkSoft">
+                                <p className="text-[11px] uppercase tracking-[0.32em] text-gold">
                                     Coming up
                                 </p>
-                                <h4 className="font-serif text-2xl text-ink mt-1">
-                                    Your session queue
+                                <h4
+                                    className="font-serif text-2xl text-cream mt-1.5"
+                                    style={{
+                                        fontVariationSettings: '"SOFT" 60, "opsz" 144',
+                                    }}
+                                >
+                                    Session queue
                                 </h4>
                             </div>
-                            <span className="w-10 h-10 rounded-full bg-canvas border border-line flex items-center justify-center text-ink">
+                            <span className="w-9 h-9 rounded-full glass-strong flex items-center justify-center text-cream">
                                 {queueOpen ? (
                                     <ChevronUp size={16} strokeWidth={1.75} />
                                 ) : (
@@ -344,18 +337,22 @@ export const AudioPlayer = ({
                                             >
                                                 <button
                                                     onClick={() => setIndex(i)}
-                                                    className={`w-full flex items-center gap-4 py-4 border-b border-line/60 last:border-b-0 text-left transition-colors duration-300 hover:bg-canvas rounded-xl px-3 ${
+                                                    className={`w-full flex items-center gap-4 py-3.5 px-3 rounded-xl border-b border-lineSoft last:border-b-0 text-left transition-all duration-300 hover:bg-glass ${
                                                         isCurrent
-                                                            ? "bg-canvas"
+                                                            ? "bg-glassStrong"
                                                             : ""
                                                     }`}
                                                 >
                                                     <span
-                                                        className={`font-serif text-2xl tabular-nums ${
+                                                        className={`font-serif text-xl tnum ${
                                                             isCurrent
-                                                                ? "text-ink"
-                                                                : "text-inkSoft/60"
+                                                                ? "text-gold"
+                                                                : "text-muted"
                                                         }`}
+                                                        style={{
+                                                            fontVariationSettings:
+                                                                '"SOFT" 80, "opsz" 144',
+                                                        }}
                                                     >
                                                         {(i + 1)
                                                             .toString()
@@ -363,15 +360,15 @@ export const AudioPlayer = ({
                                                     </span>
                                                     <span className="flex-1 min-w-0">
                                                         <span
-                                                            className={`block truncate ${
+                                                            className={`block truncate text-sm ${
                                                                 isCurrent
-                                                                    ? "text-ink font-medium"
-                                                                    : "text-ink"
+                                                                    ? "text-cream font-medium"
+                                                                    : "text-cream"
                                                             }`}
                                                         >
                                                             {t.title}
                                                         </span>
-                                                        <span className="block text-xs text-inkSoft truncate mt-0.5">
+                                                        <span className="block text-xs text-muted truncate mt-0.5">
                                                             {t.artist}
                                                         </span>
                                                     </span>
@@ -401,32 +398,23 @@ export const AudioPlayer = ({
                                 </motion.ul>
                             )}
                         </AnimatePresence>
-
-                        {!queueOpen && (
-                            <p className="text-sm text-inkSoft leading-relaxed">
-                                {tracks.length} tracks gathered for your{" "}
-                                {sessionMeta.duration}-minute session. Open to
-                                see what is coming.
-                            </p>
-                        )}
                     </div>
 
-                    {/* Session card */}
-                    <div className="mt-6 bg-canvas border border-line rounded-3xl p-6 sm:p-8">
-                        <p className="text-xs uppercase tracking-[0.28em] text-inkSoft mb-4">
+                    <div className="glass rounded-[2rem] p-6 sm:p-7">
+                        <p className="text-[11px] uppercase tracking-[0.32em] text-gold mb-5">
                             This session
                         </p>
                         <dl className="grid grid-cols-2 gap-y-4 gap-x-2">
-                            <dt className="text-sm text-inkSoft">Mood</dt>
-                            <dd className="text-sm text-ink text-right">
+                            <dt className="text-sm text-muted">Mood</dt>
+                            <dd className="text-sm text-cream text-right">
                                 {sessionMeta.moodLabel}
                             </dd>
-                            <dt className="text-sm text-inkSoft">Intensity</dt>
-                            <dd className="text-sm text-ink text-right">
+                            <dt className="text-sm text-muted">Intensity</dt>
+                            <dd className="text-sm text-cream text-right">
                                 {sessionMeta.intensityLabel}
                             </dd>
-                            <dt className="text-sm text-inkSoft">Duration</dt>
-                            <dd className="text-sm text-ink text-right">
+                            <dt className="text-sm text-muted">Duration</dt>
+                            <dd className="text-sm text-cream text-right">
                                 {sessionMeta.duration} minutes
                             </dd>
                         </dl>

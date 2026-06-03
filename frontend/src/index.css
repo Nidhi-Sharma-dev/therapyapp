@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,0..100&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,94 +6,158 @@
 
 body {
     margin: 0;
-    font-family: "Outfit", sans-serif;
+    font-family: "DM Sans", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #faf9f6;
-    color: #2a3229;
+    background-color: #0b100d;
+    color: #ece7d9;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-        monospace;
+    font-family: "JetBrains Mono", monospace;
 }
 
 @layer base {
     :root {
-        --background: 36 25% 97%;
-        --foreground: 110 10% 17%;
-        --card: 33 19% 93%;
-        --card-foreground: 110 10% 17%;
-        --popover: 36 25% 97%;
-        --popover-foreground: 110 10% 17%;
-        --primary: 110 9% 56%;
-        --primary-foreground: 36 25% 97%;
-        --secondary: 4 35% 78%;
-        --secondary-foreground: 110 10% 17%;
-        --muted: 33 19% 93%;
-        --muted-foreground: 110 6% 38%;
-        --accent: 40 45% 84%;
-        --accent-foreground: 110 10% 17%;
+        --background: 140 18% 5%;
+        --foreground: 44 31% 89%;
+        --card: 152 15% 9%;
+        --card-foreground: 44 31% 89%;
+        --popover: 140 18% 5%;
+        --popover-foreground: 44 31% 89%;
+        --primary: 36 60% 67%;
+        --primary-foreground: 140 18% 5%;
+        --secondary: 152 15% 13%;
+        --secondary-foreground: 44 31% 89%;
+        --muted: 152 15% 13%;
+        --muted-foreground: 140 6% 51%;
+        --accent: 150 23% 62%;
+        --accent-foreground: 140 18% 5%;
         --destructive: 0 65% 55%;
-        --destructive-foreground: 36 25% 97%;
-        --border: 38 14% 87%;
-        --input: 38 14% 87%;
-        --ring: 110 9% 56%;
+        --destructive-foreground: 44 31% 89%;
+        --border: 44 31% 89% / 0.1;
+        --input: 44 31% 89% / 0.1;
+        --ring: 36 60% 67%;
         --radius: 1rem;
     }
 }
 
 @layer base {
-    * {
-        @apply border-line;
-    }
     body {
-        @apply bg-canvas text-ink;
+        @apply bg-night text-cream;
+        font-feature-settings: "ss01", "ss02";
     }
     h1,
     h2,
     h3,
     h4 {
-        font-family: "Cormorant Garamond", serif;
-        font-weight: 500;
-        letter-spacing: -0.01em;
+        font-family: "Fraunces", serif;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        font-variation-settings: "SOFT" 50, "opsz" 144;
     }
     ::selection {
-        background-color: #d9b8b5;
-        color: #2a3229;
+        background-color: #e0b176;
+        color: #0b100d;
     }
 }
 
 /* Custom scrollbar */
 .sl-scroll::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 .sl-scroll::-webkit-scrollbar-track {
     background: transparent;
 }
 .sl-scroll::-webkit-scrollbar-thumb {
-    background: #d9d4cb;
+    background: rgba(236, 231, 217, 0.18);
     border-radius: 999px;
 }
 
-/* Grain noise overlay */
+/* Grain noise overlay (subtle on dark) */
 .noise-overlay {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 1;
-    opacity: 0.35;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.165 0 0 0 0 0.196 0 0 0 0 0.16 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.22;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.86 0 0 0 0 0.75 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
-/* Wave bars visualizer */
+/* Aurora mesh — luminescent gradient backdrop */
+.aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.aurora::before,
+.aurora::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+}
+.aurora::before {
+    width: 60vw;
+    height: 60vw;
+    top: -20vw;
+    right: -10vw;
+    background: radial-gradient(
+        circle,
+        rgba(138, 181, 154, 0.45) 0%,
+        transparent 70%
+    );
+    animation: glowPulse 11s ease-in-out infinite;
+}
+.aurora::after {
+    width: 50vw;
+    height: 50vw;
+    bottom: -15vw;
+    left: -10vw;
+    background: radial-gradient(
+        circle,
+        rgba(212, 147, 130, 0.4) 0%,
+        transparent 70%
+    );
+    animation: glowPulse 14s ease-in-out infinite 2s;
+}
+@keyframes glowPulse {
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.65;
+        transform: scale(1.1);
+    }
+}
+
+/* Glass surface */
+.glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border: 1px solid rgba(236, 231, 217, 0.08);
+}
+.glass-strong {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(236, 231, 217, 0.12);
+}
+
+/* Wave bars */
 .wave-bar {
     display: inline-block;
     width: 3px;
     margin: 0 2px;
-    background-color: #2a3229;
+    background-color: #e0b176;
     border-radius: 2px;
+    box-shadow: 0 0 10px rgba(224, 177, 118, 0.4);
     animation: waveBar 1.2s ease-in-out infinite;
 }
 @keyframes waveBar {
@@ -103,17 +167,17 @@ code {
         opacity: 0.6;
     }
     50% {
-        height: 24px;
+        height: 26px;
         opacity: 1;
     }
 }
 
-/* Slider styles for native range inputs */
+/* Range slider */
 input[type="range"].sl-range {
     -webkit-appearance: none;
     appearance: none;
     height: 4px;
-    background: #e3e1db;
+    background: rgba(236, 231, 217, 0.12);
     border-radius: 999px;
     outline: none;
     cursor: pointer;
@@ -124,15 +188,57 @@ input[type="range"].sl-range::-webkit-slider-thumb {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #2a3229;
-    border: 2px solid #faf9f6;
+    background: #e0b176;
+    border: 2px solid #0b100d;
     cursor: pointer;
+    box-shadow: 0 0 12px rgba(224, 177, 118, 0.5);
 }
 input[type="range"].sl-range::-moz-range-thumb {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #2a3229;
-    border: 2px solid #faf9f6;
+    background: #e0b176;
+    border: 2px solid #0b100d;
     cursor: pointer;
+    box-shadow: 0 0 12px rgba(224, 177, 118, 0.5);
+}
+
+/* Gold-edge button glow on hover */
+.btn-gold {
+    background: linear-gradient(135deg, #e0b176 0%, #b68d5c 100%);
+    color: #0b100d;
+    box-shadow:
+        0 0 0 1px rgba(224, 177, 118, 0.4),
+        0 10px 40px -10px rgba(224, 177, 118, 0.35);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-gold:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow:
+        0 0 0 1px rgba(224, 177, 118, 0.7),
+        0 18px 60px -10px rgba(224, 177, 118, 0.55);
+}
+
+/* Soft outline button */
+.btn-outline {
+    background: transparent;
+    color: #ece7d9;
+    border: 1px solid rgba(236, 231, 217, 0.2);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-outline:hover {
+    background: rgba(236, 231, 217, 0.06);
+    border-color: rgba(236, 231, 217, 0.35);
+}
+
+/* Card glow on selection */
+.card-selected-glow {
+    box-shadow:
+        0 0 0 1px rgba(224, 177, 118, 0.55),
+        0 0 50px -10px rgba(224, 177, 118, 0.3);
+}
+
+/* Tabular numerals */
+.tnum {
+    font-variant-numeric: tabular-nums;
 }
