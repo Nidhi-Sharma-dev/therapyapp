@@ -21,17 +21,23 @@ Build a frontend-first Mood Wellness Audio Therapy app with a 3-step wizard (Moo
   - Fonts: Cormorant Garamond (headings) + Outfit (body)
 
 ## Implemented (Feb 2026)
-- Welcome screen with breathing orb hero
-- Mood selector — 5 calming labels (Seeking Serenity / Clarity / Renewal / Grounding / Peace)
-- Intensity selector — 5 levels with visual meter
-- Duration selector — 5/10/15/20/30 minutes with poetic sub-labels
-- Calming loading transition (breathing orbs + "Curating your peace…")
-- Audio player — breathing visualizer, play/pause/skip/prev, progress bar, volume, mute, collapsible queue, session meta card
-- Feedback screen — "How are you feeling now?" with 5 options
-- Completion screen with restart CTA
-- Wizard progress indicator across all steps
-- Grain noise overlay, ambient blob backgrounds, micro-animations on every interaction
-- Full data-testid coverage for all interactive elements
+- Welcome screen with cinematic hero (lush imagery + aurora orb glow)
+- Mood selector — 5 image-backed glass cards with calming labels
+- Intensity selector — 5 luminescent glass cards with depth meter
+- Duration selector — 5/10/15/20/30 minutes with glowing gold-select state
+- Calming loading transition (multi-color breathing orbs + "Curating your peace…")
+- Audio player — dark cinematic, glowing breathing visualizer, play/pause/skip/prev, gold progress bar, glass queue + session meta
+- Feedback screen — glass cards with "How are you feeling now?" 5 options
+- Completion screen with aurora glow and restart CTA
+- Wizard progress indicator with gold accent across all steps
+- Aurora-mesh ambient backdrop + grain noise overlay
+- Internet Archive (archive.org) audio integration — real public-domain ambient music
+- Backend API contract ported from Node/Express to Python FastAPI:
+  - `POST /api/music-wellness/generate` (Node test contract) — validation envelope `{error: 'ValidationError', message}`, intensityBucket logic (1-2→low, 3-5→high), search queries + tags per mood
+  - `POST /api/playlist` (frontend wizard) — exposes both `url` and `audioUrl` for compatibility
+  - `GET /api/catalog` — moods/intensities/durations metadata
+- 30-min in-memory cache (non-empty results only) + SoundHelix fallback if archive.org is unreachable
+- Full data-testid coverage
 
 ## User Personas
 - Elders — large touch targets (≥48px), high contrast, generous spacing

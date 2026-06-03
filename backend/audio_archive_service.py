@@ -198,7 +198,7 @@ class AudioArchiveService:
             results = await asyncio.gather(*(hydrate(d) for d in docs[: max(limit * 3, 10)]))
             tracks = [t for t in results if t is not None][:limit]
 
-        self._cache.set(cache_key, tracks)
+        self._cache.set(cache_key, tracks) if tracks else None
         return tracks
 
 
