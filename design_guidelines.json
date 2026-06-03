@@ -1,0 +1,126 @@
+{
+  "theme": {
+    "name": "Organic & Earthy Pastel",
+    "mode": "light",
+    "archetype": "Archetype 1 (Organic & Earthy)",
+    "description": "A calm, tactile, and intentional interface that feels like a quiet pottery studio or a zen garden. Designed to reduce choice paralysis, lower heart rates, and provide a welcoming experience for both elders (high contrast, clear targets) and Gen Z (modern, organic aesthetic)."
+  },
+  "colors": {
+    "background": "#FAF9F6",
+    "surface": "#F2EFEB",
+    "surface_hover": "#EAE7E1",
+    "primary": "#8A9A86",
+    "primary_hover": "#788774",
+    "secondary": "#D9B8B5",
+    "secondary_hover": "#C9A7A4",
+    "accent_sand": "#E8DCC4",
+    "text_primary": "#2A3229",
+    "text_secondary": "#5B665A",
+    "border": "#E3E1DB",
+    "forbidden": ["#7351B7", "#1B93A4", "pure white #FFFFFF", "pure black #000000", "violet/purple gradients"]
+  },
+  "typography": {
+    "font_families": {
+      "heading": "Cormorant Garamond, serif",
+      "body": "Outfit, sans-serif"
+    },
+    "scale": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-none",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-tight",
+      "h3": "text-xl sm:text-2xl tracking-normal leading-snug",
+      "body": "text-base sm:text-lg leading-relaxed",
+      "small": "text-sm uppercase tracking-[0.2em] font-medium"
+    },
+    "rules": [
+      "Headings must use Cormorant Garamond for an editorial, therapeutic, and human touch.",
+      "Body text must use Outfit for maximum legibility across generations.",
+      "Never center-align long paragraphs. Left-align for reading ease.",
+      "Use text-text_primary for main text, never pure black."
+    ]
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing (2-3x typical density). Let the interface breathe.",
+    "container": "max-w-4xl mx-auto px-6 sm:px-8 py-12 md:py-24",
+    "grid_modes": {
+      "mood_cards": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+      "duration_selector": "flex flex-wrap gap-4 justify-center"
+    },
+    "borders_and_radii": {
+      "card_radius": "rounded-3xl",
+      "button_radius": "rounded-full",
+      "panel_radius": "rounded-3xl"
+    }
+  },
+  "surfaces_and_textures": {
+    "noise_overlay": "Apply a subtle SVG noise/grain overlay (opacity-40, mix-blend-multiply) to the main background to remove digital flatness and make it feel like paper/canvas.",
+    "cards": "Flat solid surfaces (surface color) with a delicate 1px border (border color). No harsh drop shadows. Use subtle ambient shadow on hover: shadow-[0_8px_30px_rgba(42,50,41,0.06)].",
+    "glassmorphism": "Avoid traditional cold glass. If transparency is needed, use warm tinted blur: bg-[#FAF9F6]/80 backdrop-blur-xl."
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#8A9A86] text-white hover:bg-[#788774] rounded-full px-8 py-4 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]",
+      "secondary": "bg-transparent border border-[#2A3229] text-[#2A3229] hover:bg-[#2A3229] hover:text-[#FAF9F6] rounded-full px-8 py-4 transition-all duration-300"
+    },
+    "mood_cards": {
+      "style": "bg-[#F2EFEB] border border-[#E3E1DB] rounded-3xl p-8 cursor-pointer transition-all duration-500 hover:bg-[#EAE7E1] hover:-translate-y-1 relative overflow-hidden",
+      "selected_state": "ring-2 ring-[#8A9A86] bg-[#F4F6F3]",
+      "content": "Large typography, ample negative space, lucide-react icon (strokeWidth 1.5) in top left."
+    },
+    "audio_player": {
+      "container": "bg-[#F2EFEB] rounded-3xl p-8 max-w-2xl mx-auto shadow-[0_20px_40px_rgba(42,50,41,0.05)]",
+      "visualizer": "A pulsing CSS 'breathing circle' in the center (bg-gradient-to-tr from-[#8A9A86] to-[#D9B8B5] opacity-20 blur-2xl rounded-full w-48 h-48 animate-breathe absolute -z-10)",
+      "controls": "Large, accessible touch targets (min 48x48px). Lucide icons."
+    }
+  },
+  "animations": {
+    "breathing_pulse": "keyframes: { breathe: { '0%, 100%': { transform: 'scale(1)', opacity: '0.5' }, '50%': { transform: 'scale(1.15)', opacity: '0.8' } } }, animation: 'breathe 6s ease-in-out infinite'",
+    "transitions": "Use framer-motion for smooth, soft page transitions. initial={{ opacity: 0, y: 20 }}, animate={{ opacity: 1, y: 0 }}, transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}.",
+    "loading_state": "Full screen ambient breathing orb (sage and rose overlapping blurs) with text 'Curating your peace...' fading in and out."
+  },
+  "media": {
+    "images": [
+      {
+        "category": "abstract_background_sage",
+        "url": "https://images.pexels.com/photos/5852280/pexels-photo-5852280.jpeg",
+        "description": "Flat lay of soft green leaves, used sparingly as a masked background texture or welcome screen graphic."
+      },
+      {
+        "category": "abstract_background_rose",
+        "url": "https://images.pexels.com/photos/16216571/pexels-photo-16216571.jpeg",
+        "description": "Soft pink ranunculus petals macro, useful for the 'Seeking Renewal' or completion screen background hints."
+      },
+      {
+        "category": "zen_garden_texture",
+        "url": "https://images.pexels.com/photos/7418090/pexels-photo-7418090.jpeg",
+        "description": "Calming zen garden sand texture, excellent for the background of the loading state."
+      }
+    ]
+  },
+  "content_strategy": {
+    "moods": [
+      { "id": "stressed", "label": "Seeking Serenity", "original": "Stressed", "icon": "Wind" },
+      { "id": "unfocused", "label": "Seeking Clarity", "original": "Unfocused", "icon": "Droplets" },
+      { "id": "low_energy", "label": "Seeking Renewal", "original": "Low Energy", "icon": "Sun" },
+      { "id": "anxious", "label": "Seeking Grounding", "original": "Anxious", "icon": "Mountain" },
+      { "id": "restless", "label": "Seeking Peace", "original": "Restless", "icon": "Feather" }
+    ],
+    "intensities": ["Gentle", "Mild", "Balanced", "Deep", "Immersive"],
+    "durations": ["5 min", "10 min", "15 min", "20 min", "30 min"]
+  },
+  "accessibility": {
+    "touch_targets": "Minimum 48x48px for all interactive elements to support elder users.",
+    "contrast": "Ensure text contrast meets WCAG AA. Use #2A3229 on #FAF9F6.",
+    "test_ids": "Every button, card, and input MUST have a role-based data-testid (e.g., data-testid='mood-card-seeking-serenity', data-testid='play-pause-button')."
+  },
+  "instructions_to_main_agent": [
+    "Strictly adhere to the color palette. Do NOT use default Tailwind grays, blues, or purples.",
+    "Install and configure 'Cormorant Garamond' and 'Outfit' fonts via Google Fonts.",
+    "Use framer-motion for the multi-step wizard transitions (AnimatePresence mode='wait').",
+    "Implement the 'breathing' animation using Tailwind arbitrary values or tailwind.config.js extend.",
+    "Create a custom Noise component (SVG filter) and position it fixed with pointer-events-none over the entire app.",
+    "Use lucide-react for all icons. Set strokeWidth to 1.5 for a delicate, refined look.",
+    "The Audio Player should use standard HTML5 Audio API (or mock it elegantly if no real audio files are available, since the prompt says 'frontend-only UI state' for feedback, mock the audio playback progress visually).",
+    "Do not use Shadcn 'Card' components if they restrict the custom padding/borders. Build custom divs for the mood cards using the classes provided.",
+    "Ensure the feedback screen is a seamless state transition after the audio progress bar reaches 100%."
+  ]
+}
