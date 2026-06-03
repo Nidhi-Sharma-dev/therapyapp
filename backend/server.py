@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,8 +6,9 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from typing import List, Optional
 import uuid
+import random
 from datetime import datetime, timezone
 
 
@@ -20,51 +21,143 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(title="Soundlull Mood Wellness API")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+# ---------- Static catalog ----------
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+MOODS = [
+    {"id": "stressed", "label": "Seeking Serenity",  "subtitle": "Stressed",      "icon": "Wind",     "description": "Soften the edges of a heavy day."},
+    {"id": "unfocused", "label": "Seeking Clarity",  "subtitle": "Unfocused",     "icon": "Droplets", "description": "Settle scattered thoughts into one quiet stream."},
+    {"id": "low_energy","label": "Seeking Renewal",  "subtitle": "Low Energy",    "icon": "Sun",      "description": "Invite warmth back into your body."},
+    {"id": "anxious",   "label": "Seeking Grounding","subtitle": "Anxious",       "icon": "Mountain", "description": "Return to the steady earth beneath you."},
+    {"id": "restless",  "label": "Seeking Peace",    "subtitle": "Restless",      "icon": "Feather",  "description": "Let the body slow to the breath."},
+]
 
-# Add your routes to the router instead of directly to app
+INTENSITIES = [
+    {"id": "gentle",    "label": "Gentle",    "description": "Whisper-soft, barely there."},
+    {"id": "mild",      "label": "Mild",      "description": "A light, easy embrace."},
+    {"id": "balanced",  "label": "Balanced",  "description": "Even, grounding presence."},
+    {"id": "deep",      "label": "Deep",      "description": "Immersive resonance."},
+    {"id": "immersive", "label": "Immersive", "description": "Full, enveloping landscape."},
+]
+
+DURATIONS = [5, 10, 15, 20, 30]
+
+# Royalty-free demo audio (SoundHelix instrumentals) — 16 tracks
+AUDIO_POOL = [
+    {"id": f"song-{i}", "url": f"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-{i}.mp3"}
+    for i in range(1, 17)
+]
+
+# Track titles & artist names per mood for the curated experience
+MOOD_THEMES = {
+    "stressed": {
+        "artist": "Hollow Pines",
+        "titles": ["Dusk Over Still Water", "Slow Exhale", "Cedar & Quiet", "Long Light Returning", "The Pause Between", "Soft Hands of Evening"],
+    },
+    "unfocused": {
+        "artist": "Reed & River",
+        "titles": ["One Steady Thread", "Tide Pulls Inward", "A Room With One Window", "Single Lit Candle", "The Mind Coming Home", "Threading Calm"],
+    },
+    "low_energy": {
+        "artist": "Marigold Choir",
+        "titles": ["Slow Sun Returning", "Tea Steam Rising", "Warm Wood Floor", "First Yellow Light", "Honey Hour", "The Body Remembers"],
+    },
+    "anxious": {
+        "artist": "Stonefield Trio",
+        "titles": ["Anchor in the Sand", "Roots Below the Storm", "Held by the Mountain", "Heavy & Held", "Earth Under Feet", "Quiet Granite"],
+    },
+    "restless": {
+        "artist": "Linen Sky",
+        "titles": ["Folding the Day Away", "Breath, Then Breath", "Linen on the Line", "Soft Room, Soft Hour", "A Slow Sky", "Falling Open"],
+    },
+}
+
+
+def build_playlist(mood_id: str, intensity_id: str, duration_min: int) -> dict:
+    """Pre-curated, deterministic playlist composition."""
+    theme = MOOD_THEMES.get(mood_id, MOOD_THEMES["stressed"])
+    # Average track length ~ 6 min; pick enough tracks to fill the requested duration
+    n_tracks = max(2, min(6, round(duration_min / 5)))
+    # Seeded selection so the same mood+intensity+duration is reproducible
+    seed_str = f"{mood_id}-{intensity_id}-{duration_min}"
+    rng = random.Random(seed_str)
+    audio_choices = rng.sample(AUDIO_POOL, k=n_tracks)
+    title_choices = rng.sample(theme["titles"], k=n_tracks)
+    tracks = []
+    for idx, (audio, title) in enumerate(zip(audio_choices, title_choices)):
+        tracks.append({
+            "id": f"{seed_str}-{idx}",
+            "title": title,
+            "artist": theme["artist"],
+            "url": audio["url"],
+        })
+    return {
+        "session_id": str(uuid.uuid4()),
+        "mood_id": mood_id,
+        "intensity_id": intensity_id,
+        "duration_minutes": duration_min,
+        "tracks": tracks,
+    }
+
+
+# ---------- Schemas ----------
+
+class PlaylistRequest(BaseModel):
+    mood_id: str
+    intensity_id: str
+    duration_minutes: int
+
+
+class Track(BaseModel):
+    id: str
+    title: str
+    artist: str
+    url: str
+
+
+class PlaylistResponse(BaseModel):
+    session_id: str
+    mood_id: str
+    intensity_id: str
+    duration_minutes: int
+    tracks: List[Track]
+
+
+class CatalogResponse(BaseModel):
+    moods: List[dict]
+    intensities: List[dict]
+    durations: List[int]
+
+
+# ---------- Routes ----------
+
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Soundlull Mood Wellness API"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.get("/catalog", response_model=CatalogResponse)
+async def get_catalog():
+    return CatalogResponse(moods=MOODS, intensities=INTENSITIES, durations=DURATIONS)
+
+
+@api_router.post("/playlist", response_model=PlaylistResponse)
+async def create_playlist(req: PlaylistRequest):
+    valid_moods = {m["id"] for m in MOODS}
+    valid_intensities = {i["id"] for i in INTENSITIES}
+    if req.mood_id not in valid_moods:
+        raise HTTPException(status_code=400, detail="Invalid mood_id")
+    if req.intensity_id not in valid_intensities:
+        raise HTTPException(status_code=400, detail="Invalid intensity_id")
+    if req.duration_minutes not in DURATIONS:
+        raise HTTPException(status_code=400, detail="Invalid duration_minutes")
+    return PlaylistResponse(**build_playlist(req.mood_id, req.intensity_id, req.duration_minutes))
+
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -77,12 +170,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
