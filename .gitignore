@@ -3,6 +3,9 @@
 # IDE and editors
 .idea/
 .vscode/
+/.commandcode
+test_results.md
+Project_summary.md
 
 # Dependencies
 node_modules/
