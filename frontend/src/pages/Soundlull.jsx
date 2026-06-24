@@ -110,7 +110,7 @@ export default function Soundlull() {
 
             <NoiseOverlay />
 
-            <header className="relative z-20 max-w-7xl mx-auto px-6 sm:px-10 pt-8 flex items-center justify-between">
+{/*            <header className="relative z-20 max-w-7xl mx-auto px-6 sm:px-10 pt-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="relative w-10 h-10 rounded-full glass flex items-center justify-center">
                         <div className="w-2 h-2 rounded-full bg-gold shadow-[0_0_14px_rgba(224,177,118,0.7)] animate-breathe" />
@@ -134,7 +134,7 @@ export default function Soundlull() {
                     </span>
                 </div>
             </header>
-
+*/}
             {showProgress && <WizardProgress currentKey={step} />}
 
             <main className="relative z-10">
@@ -216,7 +216,7 @@ export default function Soundlull() {
                     </div>
                 )}
             </main>
-
+{/*
             <footer className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-10 mt-10 border-t border-line">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-[10px] uppercase tracking-[0.32em] text-muted">
@@ -227,6 +227,7 @@ export default function Soundlull() {
                     </p>
                 </div>
             </footer>
+*/}
         </div>
     );
 }
