@@ -172,7 +172,7 @@ export const AudioPlayer = ({
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="w-3 h-3 rounded-full bg-gold/80" />
+                                    <div className="w-3 h-3 rounded-full bg-[#1a1a18]" />
                                 )}
                             </div>
                         </div>

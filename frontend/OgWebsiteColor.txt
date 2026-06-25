@@ -1,3 +1,5 @@
+ORIGINAL WEBSITE DARK MODE COLOUR, SAVE THIS FILE AS "index.css"
+
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,0..100&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap");
 
 @tailwind base;
@@ -9,8 +11,8 @@ body {
     font-family: "DM Sans", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f5f0e8;
-    color: #1a1a18;    
+    background-color: #0b100d;
+    color: #ece7d9;    
 }
 
 code {
@@ -19,32 +21,32 @@ code {
 
 @layer base {
     :root {
-       --background: 44 31% 95%;
-        --foreground: 140 18% 10%;
-        --card: 44 25% 90%;
-        --card-foreground: 140 18% 10%;
-        --popover: 44 31% 95%;
-        --popover-foreground: 140 18% 10%;
-        --primary: 350 45% 75%;
-        --primary-foreground: 44 31% 95%;
-        --secondary: 44 20% 85%;
-        --secondary-foreground: 140 18% 10%;
-        --muted: 44 20% 85%;
-        --muted-foreground: 140 6% 40%;
-        --accent: 150 23% 50%;
-        --accent-foreground: 44 31% 95%;
+       --background: 140 18% 5%;
+        --foreground: 44 31% 89%;
+        --card: 152 15% 9%;
+        --card-foreground: 44 31% 89%;
+        --popover: 140 18% 5%;
+        --popover-foreground: 44 31% 89%;
+        --primary: 36 60% 67%;
+        --primary-foreground: 140 18% 5%;
+        --secondary: 152 15% 13%;
+        --secondary-foreground: 44 31% 89%;
+        --muted: 152 15% 13%;
+        --muted-foreground: 140 6% 51%;
+        --accent: 150 23% 62%;
+        --accent-foreground: 140 18% 5%;
         --destructive: 0 65% 55%;
-        --destructive-foreground: 44 31% 95%;
-        --border: 140 18% 10% / 0.1;
-        --input: 140 18% 10% / 0.1;
-        --ring: 350 45% 75%;
-        --radius: 1rem;   
+        --destructive-foreground: 44 31% 89%;
+        --border: 44 31% 89% / 0.1;
+        --input: 44 31% 89% / 0.1;
+        --ring: 36 60% 67%;
+        --radius: 1rem;     
     }
 }
 
 @layer base {
     body {
-        @apply bg-[#f5f0e8] text-[#1a1a18];
+        @apply bg-night text-cream;
         font-feature-settings: "ss01", "ss02";
     }
     h1,
@@ -57,8 +59,8 @@ code {
         font-variation-settings: "SOFT" 50, "opsz" 144;
     }
     ::selection {
-        background-color: #e8a0a8;
-        color: #f5f0e8;
+        background-color: #e0b176;
+        color: #0b100d;
     }
 }
 
@@ -70,7 +72,7 @@ code {
     background: transparent;
 }
 .sl-scroll::-webkit-scrollbar-thumb {
-    background: rgba(26, 26, 24, 0.15);
+    background: rgba(236, 231, 217, 0.18);
     border-radius: 999px;
 }
 
@@ -107,7 +109,7 @@ code {
     right: -10vw;
     background: radial-gradient(
         circle,
-        rgba(220, 160, 170, 0.35) 0%,
+        rgba(138, 181, 154, 0.45) 0%,
         transparent 70%
     );
     animation: glowPulse 11s ease-in-out infinite;
@@ -119,7 +121,7 @@ code {
     left: -10vw;
     background: radial-gradient(
         circle,
-        rgba(150, 190, 160, 0.3) 0%,
+        rgba(212, 147, 130, 0.4) 0%,
         transparent 70%
     );
     animation: glowPulse 14s ease-in-out infinite 2s;
@@ -138,16 +140,16 @@ code {
 
 /* Glass surface */
 .glass {
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(24px) saturate(140%);
     -webkit-backdrop-filter: blur(24px) saturate(140%);
-    border: 1px solid rgba(26, 26, 24, 0.08);
+    border: 1px solid rgba(236, 231, 217, 0.08);
 }
 .glass-strong {
-    background: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 255, 255, 0.07);
     backdrop-filter: blur(28px) saturate(160%);
     -webkit-backdrop-filter: blur(28px) saturate(160%);
-    border: 1px solid rgba(26, 26, 24, 0.12);
+    border: 1px solid rgba(236, 231, 217, 0.12);
 }
 
 /* Wave bars */
@@ -155,9 +157,9 @@ code {
     display: inline-block;
     width: 3px;
     margin: 0 2px;
-    background-color: #e8a0a8;
+    background-color: #e0b176;
     border-radius: 2px;
-    box-shadow: 0 0 10px rgba(232, 160, 168, 0.4);
+    box-shadow: 0 0 10px rgba(224, 177, 118, 0.4);
     animation: waveBar 1.2s ease-in-out infinite;
 }
 @keyframes waveBar {
@@ -177,7 +179,7 @@ input[type="range"].sl-range {
     -webkit-appearance: none;
     appearance: none;
     height: 4px;
-   background: rgba(26, 26, 24, 0.08);
+    background: rgba(236, 231, 217, 0.12);
     border-radius: 999px;
     outline: none;
     cursor: pointer;
@@ -188,54 +190,54 @@ input[type="range"].sl-range::-webkit-slider-thumb {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #e8a0a8;
-    border: 2px solid #f5f0e8;
+    background: #e0b176;
+    border: 2px solid #0b100d;
     cursor: pointer;
-    box-shadow: 0 0 12px rgba(232, 160, 168, 0.5);
+    box-shadow: 0 0 12px rgba(224, 177, 118, 0.5);
 }
 input[type="range"].sl-range::-moz-range-thumb {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #e8a0a8;
-    border: 2px solid #f5f0e8;
+    background: #e0b176;
+    border: 2px solid #0b100d;
     cursor: pointer;
-    box-shadow: 0 0 12px rgba(232, 160, 168, 0.5);
+    box-shadow: 0 0 12px rgba(224, 177, 118, 0.5);
 }
 
 /* Gold-edge button glow on hover */
 .btn-gold {
-    background: linear-gradient(135deg, #e8a0a8 0%, #c97880 100%);
-    color: #f5f0e8;
+    background: linear-gradient(135deg, #e0b176 0%, #b68d5c 100%);
+    color: #0b100d;
     box-shadow:
-        0 0 0 1px rgba(232, 160, 168, 0.4),
-        0 10px 40px -10px rgba(232, 160, 168, 0.35);
+        0 0 0 1px rgba(224, 177, 118, 0.4),
+        0 10px 40px -10px rgba(224, 177, 118, 0.35);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .btn-gold:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow:
-        0 0 0 1px rgba(232, 160, 168, 0.7),
-        0 18px 60px -10px rgba(232, 160, 168, 0.55);
+        0 0 0 1px rgba(224, 177, 118, 0.7),
+        0 18px 60px -10px rgba(224, 177, 118, 0.55);
 }
 
 /* Soft outline button */
 .btn-outline {
     background: transparent;
-    color: #1a1a18;;
-    border: 1px solid rgba(26, 26, 24, 0.2);
+    color: #ece7d9;
+    border: 1px solid rgba(236, 231, 217, 0.2);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .btn-outline:hover {
-    background: rgba(26, 26, 24, 0.06);
-    border-color: rgba(26, 26, 24, 0.25);
+    background: rgba(236, 231, 217, 0.06);
+    border-color: rgba(236, 231, 217, 0.35);
 }
 
 /* Card glow on selection */
 .card-selected-glow {
     box-shadow:
-        0 0 0 1px rgba(232, 160, 168, 0.55),
-        0 0 50px -10px rgba(232, 160, 168, 0.3);
+        0 0 0 1px rgba(224, 177, 118, 0.55),
+        0 0 50px -10px rgba(224, 177, 118, 0.3);
 }
 
 /* Tabular numerals */
